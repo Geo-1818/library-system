@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class BorrowRecordController extends Controller
 {
-    
+    // Get all borrow records (Admin)
     public function index()
     {
         $records = BorrowRecord::with('user', 'book')->paginate(15);
@@ -21,7 +21,7 @@ class BorrowRecordController extends Controller
         ]);
     }
 
-    
+    // Get user's borrow records
     public function userBorrows()
     {
         $records = BorrowRecord::where('user_id', Auth::id())
@@ -34,7 +34,7 @@ class BorrowRecordController extends Controller
         ]);
     }
 
-    
+    // Get single record
     public function show($id)
     {
         $record = BorrowRecord::with('user', 'book')->findOrFail($id);
@@ -45,7 +45,7 @@ class BorrowRecordController extends Controller
         ]);
     }
 
-    
+    // Borrow a book
     public function borrow(Request $request)
     {
         $validated = $request->validate([
@@ -77,7 +77,7 @@ class BorrowRecordController extends Controller
         ], 201);
     }
 
-    
+    // Return a book
     public function returnBook($id)
     {
         $record = BorrowRecord::findOrFail($id);
@@ -103,7 +103,7 @@ class BorrowRecordController extends Controller
         ]);
     }
 
-    
+    // Approve borrow (Admin)
     public function approveBorrow($id)
     {
         $record = BorrowRecord::findOrFail($id);
@@ -116,7 +116,7 @@ class BorrowRecordController extends Controller
         ]);
     }
 
-    
+    // Reject borrow (Admin)
     public function rejectBorrow($id)
     {
         $record = BorrowRecord::findOrFail($id);

@@ -15,7 +15,7 @@ class AdminController extends Controller
         $this->middleware('admin');
     }
 
-    
+    // Users Management
     public function users()
     {
         $users = User::paginate(15);
@@ -49,24 +49,24 @@ class AdminController extends Controller
         return redirect('/admin/users')->with('success', 'User deleted successfully!');
     }
 
-    
+    // Services Management
     public function services()
     {
         $services = Service::paginate(15);
         return view('admin.services', compact('services'));
     }
 
-    
+    // Show import form
     public function showImportForm()
     {
         return view('admin.import-services');
     }
 
-    
+    // Handle uploaded TXT or PDF and create Service entries
     public function importServices(Request $request)
     {
         $validated = $request->validate([
-            'file' => 'required|file|mimes:txt,pdf|max:10240', 
+            'file' => 'required|file|mimes:txt,pdf|max:10240', // max 10MB
         ]);
 
         $file = $request->file('file');
@@ -74,7 +74,7 @@ class AdminController extends Controller
 
         $created = 0;
 
-        
+        // If TXT, read lines and create services (expecting CSV-like lines: name|provider|duration_minutes|available_slots|description)
         if ($file->getClientOriginalExtension() === 'txt') {
             $content = file_get_contents(storage_path('app/public/' . $path));
             $lines = preg_split('/\r?\n/', $content);
@@ -99,7 +99,7 @@ class AdminController extends Controller
                 $created++;
             }
         } else {
-            
+            // For PDF: try to use Smalot\PdfParser if available to extract text, otherwise create a single service entry referencing the file
             $text = null;
             if (class_exists('\\Smalot\\PdfParser\\Parser')) {
                 try {
@@ -112,7 +112,7 @@ class AdminController extends Controller
             }
 
             if ($text) {
-                
+                // split by lines and try to create entries similar to TXT parsing
                 $lines = preg_split('/\r?\n/', $text);
                 foreach ($lines as $line) {
                     $line = trim($line);
@@ -135,7 +135,7 @@ class AdminController extends Controller
                     $created++;
                 }
             } else {
-                
+                // Fallback: create a record using filename as title
                 Service::create([
                     'name' => pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
                     'provider' => 'Imported',
@@ -179,7 +179,7 @@ class AdminController extends Controller
         return redirect('/admin/services')->with('success', 'Service deleted successfully!');
     }
 
-    
+    // Dashboard
     public function dashboard()
     {
         $totalUsers = User::count();
@@ -195,7 +195,7 @@ class AdminController extends Controller
         ));
     }
 
-    
+    // Appointment Records
     public function appointments()
     {
         $records = Appointment::with(['user', 'service', 'schedule'])->paginate(15);

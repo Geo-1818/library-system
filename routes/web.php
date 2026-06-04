@@ -7,13 +7,21 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StudentController;
 
-
+/*
+|--------------------------------------------------------------------------
+| Online Booking System Routes
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/', function () {
     return view('landing');
 });
 
-
+/*
+|--------------------------------------------------------------------------
+| Authentication Routes
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/register', [AuthController::class, 'showRegister'])
     ->name('register')
@@ -35,7 +43,11 @@ Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout')
     ->middleware('auth');
 
-
+/*
+|--------------------------------------------------------------------------
+| User Routes
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/services', [ServiceController::class, 'index'])
     ->name('services.index');
@@ -57,13 +69,17 @@ Route::middleware('auth')->group(function () {
         ->name('appointments.cancel');
 });
 
-
+/*
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])
         ->name('admin.dashboard');
 
-    
+    // Users management
     Route::get('/users', [AdminController::class, 'users'])
         ->name('admin.users');
 
@@ -76,11 +92,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::delete('/users/{id}', [AdminController::class, 'deleteUser'])
         ->name('admin.users.delete');
 
-    
+    // Services management
     Route::get('/services', [AdminController::class, 'services'])
         ->name('admin.services');
 
-    
+    // Import services (TXT or PDF)
     Route::get('/services/import', [AdminController::class, 'showImportForm'])
         ->name('admin.services.import');
 
@@ -96,7 +112,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::delete('/services/{id}', [AdminController::class, 'deleteService'])
         ->name('admin.services.delete');
 
-    
+    // Appointment records
     Route::get('/appointments', [AdminController::class, 'appointments'])
         ->name('admin.appointments');
 
@@ -107,7 +123,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         ->name('admin.appointments.reject');
 });
 
-
+// Legacy route redirects for compatibility
 Route::redirect('/books', '/services', 301);
 Route::redirect('/books/{id}/borrow', '/services/{id}/book', 301);
 Route::redirect('/borrow/{id}', '/appointments/{id}/book', 301);

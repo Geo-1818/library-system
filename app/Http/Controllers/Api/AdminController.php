@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    
+    // Dashboard stats
     public function dashboard()
     {
         return response()->json([
@@ -25,7 +25,7 @@ class AdminController extends Controller
         ]);
     }
 
-    
+    // Manage users
     public function users()
     {
         $users = User::paginate(15);

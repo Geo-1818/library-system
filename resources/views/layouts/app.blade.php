@@ -31,7 +31,7 @@
             width: 100%;
         }
 
-        
+        /* Admin sidebar styles */
         .admin-sidebar {
             position: fixed;
             left: -260px;
@@ -86,13 +86,13 @@
         }
 
         .sidebar-toggle-fixed:hover { cursor: pointer; opacity: 0.95; }
-        
+        /* Book card action styles */
         .card-body.d-flex { display: flex; flex-direction: column; }
         .book-actions { gap: .5rem; display: flex; flex-direction: column; }
         .book-actions .badge { align-self: flex-start; }
         .book-actions .btn.flex-fill { min-width: 0; }
 
-        
+        /* Dashboard stat card colors */
         .stat-card { border-radius: 6px; padding: 18px; }
         .stat-card .stat-header { font-weight: 600; }
         .stat-card.stat-1 { background: linear-gradient(180deg, #e9f7ef 0%, #ffffff 100%); border: 1px solid #d1efd6; }
@@ -104,7 +104,7 @@
 <body class="@auth @if(auth()->user()->role === 'admin') admin-user @endif @endauth">
     @auth
         @if(auth()->user()->role !== 'admin')
-            
+            {{-- Student navigation is provided in the sidebar --}}
         @endif
     @else
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -127,7 +127,7 @@
         </nav>
     @endauth
 
-    
+    {{-- Sidebar for admin actions --}}
     @auth
         @if (auth()->user()->role === 'admin')
             <div id="adminSidebar" class="admin-sidebar">
@@ -177,7 +177,7 @@
         @endif
     @endauth
 
-    
+    {{-- Fixed side toggle button (visible for authenticated users) --}}
     @auth
         <button id="sidebarToggleFixed" class="sidebar-toggle-fixed" aria-label="Toggle sidebar">☰</button>
     @endauth
@@ -231,11 +231,11 @@
                 e.preventDefault(); closeSidebar();
             });
 
-            
+            // Close sidebar when clicking outside on small screens
             document.addEventListener('click', function(e){
                 if(!sidebar) return;
                 if(window.innerWidth <= 991 && sidebar.classList.contains('open')){
-                    
+                    // if click is outside sidebar and outside any toggle, close
                     const clickedInsideToggle = toggles.some(t => t && t.contains(e.target));
                     if(!sidebar.contains(e.target) && !clickedInsideToggle){
                         closeSidebar();
