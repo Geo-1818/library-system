@@ -11,12 +11,10 @@ class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
 
-    /**
-     * Seed the application's database.
-     */
+    
     public function run(): void
     {
-        // Create or update a default admin user
+        
         User::updateOrCreate(
             ['email' => 'admin@booking.com'],
             [
@@ -26,7 +24,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // Create or update a default regular user for testing
+        
         User::updateOrCreate(
             ['email' => 'test@example.com'],
             [
@@ -36,7 +34,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // Add three sample books
+        
         Book::updateOrCreate(
             ['isbn' => '9780143127741'],
             [

@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
-    // Get all books
+    
     public function index()
     {
         return response()->json([
@@ -17,7 +17,7 @@ class BookController extends Controller
         ]);
     }
 
-    // Get single book
+    
     public function show($id)
     {
         $book = Book::findOrFail($id);
@@ -27,7 +27,7 @@ class BookController extends Controller
         ]);
     }
 
-    // Create book (Admin only)
+    
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -47,7 +47,7 @@ class BookController extends Controller
         ], 201);
     }
 
-    // Update book (Admin only)
+    
     public function update(Request $request, $id)
     {
         $book = Book::findOrFail($id);
@@ -69,7 +69,7 @@ class BookController extends Controller
         ]);
     }
 
-    // Delete book (Admin only)
+    
     public function destroy($id)
     {
         $book = Book::findOrFail($id);
@@ -81,7 +81,7 @@ class BookController extends Controller
         ]);
     }
 
-    // Search books
+    
     public function search(Request $request)
     {
         $query = $request->input('q');

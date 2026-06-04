@@ -33,9 +33,7 @@ class BorrowRecordController extends Controller
         return back()->with('success', 'Book borrowed successfully!');
     }
 
-    /**
-     * Show borrow confirmation page for a book.
-     */
+    
     public function showBorrow($id)
     {
         $book = Book::findOrFail($id);
