@@ -6,6 +6,8 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\BorrowRecordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,7 +47,24 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 /*
 |--------------------------------------------------------------------------
-| User Routes
+| Public Library Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('books')->group(function () {
+    Route::get('/', [BookController::class, 'index'])
+        ->name('books.index');
+
+    Route::get('/search', [BookController::class, 'search'])
+        ->name('books.search');
+
+    Route::get('/{id}', [BookController::class, 'show'])
+        ->name('books.show');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Student/User Routes
 |--------------------------------------------------------------------------
 */
 
@@ -59,6 +78,27 @@ Route::middleware('auth')->group(function () {
     Route::get('/history', [StudentController::class, 'history'])
         ->name('student.history');
 
+    /*
+    |--------------------------------------------------------------------------
+    | Student Library Routes
+    |--------------------------------------------------------------------------
+    */
+
+    Route::prefix('library')->group(function () {
+        Route::get('/borrow-history', [BorrowRecordController::class, 'userBorrows'])
+            ->name('library.borrow-history');
+
+        Route::get('/borrow/{id}', [BorrowRecordController::class, 'showBorrow'])
+            ->name('library.borrow.show');
+
+        Route::post('/borrow/{id}', [BorrowRecordController::class, 'borrow'])
+            ->name('library.borrow.store');
+
+        Route::post('/return/{id}', [BorrowRecordController::class, 'returnBook'])
+            ->name('library.return');
+    });
+
+    // Services/Appointments
     Route::get('/services/{id}/book', [AppointmentController::class, 'show'])
         ->name('services.show');
 
@@ -78,6 +118,53 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])
         ->name('admin.dashboard');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Library Management Routes
+    |--------------------------------------------------------------------------
+    */
+
+    Route::prefix('library')->group(function () {
+        // Books management
+        Route::get('/books', [AdminController::class, 'books'])
+            ->name('admin.books');
+
+        Route::get('/books/create', [BookController::class, 'create'])
+            ->name('admin.books.create');
+
+        Route::post('/books', [BookController::class, 'store'])
+            ->name('admin.books.store');
+
+        Route::get('/books/{id}/edit', [BookController::class, 'edit'])
+            ->name('admin.books.edit');
+
+        Route::put('/books/{id}', [BookController::class, 'update'])
+            ->name('admin.books.update');
+
+        Route::delete('/books/{id}', [BookController::class, 'destroy'])
+            ->name('admin.books.destroy');
+
+        // Import books
+        Route::get('/books/import', [BookController::class, 'showImportForm'])
+            ->name('admin.books.import');
+
+        Route::post('/books/import', [BookController::class, 'importBooks'])
+            ->name('admin.books.import.store');
+
+        // Borrow records management
+        Route::get('/borrow-records', [BorrowRecordController::class, 'index'])
+            ->name('admin.borrow-records');
+
+        Route::get('/borrow-records/{id}', [BorrowRecordController::class, 'show'])
+            ->name('admin.borrow-records.show');
+
+        Route::post('/borrow-records/{id}/approve', [BorrowRecordController::class, 'approveBorrow'])
+            ->name('admin.borrow-records.approve');
+
+        Route::post('/borrow-records/{id}/reject', [BorrowRecordController::class, 'rejectBorrow'])
+            ->name('admin.borrow-records.reject');
+    });
 
     // Users management
     Route::get('/users', [AdminController::class, 'users'])

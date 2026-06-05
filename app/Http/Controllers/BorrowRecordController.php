@@ -5,10 +5,65 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use App\Models\BorrowRecord;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class BorrowRecordController extends Controller
 {
-    public function borrow($id)
+    /**
+     * Display a listing of all borrow records (Admin only).
+     */
+    public function index()
+    {
+        $records = BorrowRecord::with(['user', 'book'])
+            ->latest()
+            ->paginate(15);
+
+        return view('admin.borrow-records', compact('records'));
+    }
+
+    /**
+     * Display user's borrow records.
+     */
+    public function userBorrows()
+    {
+        $records = Auth::user()
+            ->borrowRecords()
+            ->with('book')
+            ->latest()
+            ->paginate(10);
+
+        return view('student.borrow-history', compact('records'));
+    }
+
+    /**
+     * Show a specific borrow record.
+     */
+    public function show($id)
+    {
+        $record = BorrowRecord::with(['user', 'book'])->findOrFail($id);
+
+        // Check if user is the owner or an admin
+        if (Auth::id() !== $record->user_id && Auth::user()->role !== 'admin') {
+            return back()->with('error', 'You do not have permission to view this record.');
+        }
+
+        return view('borrow-records.show', compact('record'));
+    }
+
+    /**
+     * Show borrow confirmation page for a book.
+     */
+    public function showBorrow($id)
+    {
+        $book = Book::findOrFail($id);
+
+        return view('books.borrow', compact('book'));
+    }
+
+    /**
+     * Create a new borrow record.
+     */
+    public function borrow(Request $request, $id)
     {
         $book = Book::findOrFail($id);
         $user = Auth::user();
@@ -30,24 +85,17 @@ class BorrowRecordController extends Controller
 
         $book->decrement('quantity');
 
-        return back()->with('success', 'Book borrowed successfully!');
+        return redirect()->route('student.dashboard')->with('success', 'Book borrowed successfully!');
     }
 
     /**
-     * Show borrow confirmation page for a book.
+     * Return a borrowed book.
      */
-    public function showBorrow($id)
-    {
-        $book = Book::findOrFail($id);
-
-        return view('books.borrow', compact('book'));
-    }
-
     public function returnBook($id)
     {
         $record = BorrowRecord::findOrFail($id);
 
-        if ($record->user_id !== Auth::id()) {
+        if ($record->user_id !== Auth::id() && Auth::user()->role !== 'admin') {
             return back()->with('error', 'You do not have permission to return this record.');
         }
 
@@ -63,5 +111,34 @@ class BorrowRecordController extends Controller
         $record->book->increment('quantity');
 
         return back()->with('success', 'Book returned successfully!');
+    }
+
+    /**
+     * Approve a borrow request (Admin only).
+     */
+    public function approveBorrow($id)
+    {
+        $record = BorrowRecord::findOrFail($id);
+
+        $record->update(['status' => 'approved']);
+
+        return back()->with('success', 'Borrow record approved!');
+    }
+
+    /**
+     * Reject a borrow request (Admin only).
+     */
+    public function rejectBorrow($id)
+    {
+        $record = BorrowRecord::findOrFail($id);
+
+        if ($record->status !== 'borrowed') {
+            return back()->with('error', 'Can only reject borrowed records.');
+        }
+
+        $record->update(['status' => 'rejected']);
+        $record->book->increment('quantity');
+
+        return back()->with('success', 'Borrow record rejected!');
     }
 }

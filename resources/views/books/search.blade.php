@@ -4,32 +4,20 @@
 <div class="container my-5">
     <div class="row mb-4">
         <div class="col-md-8">
-            <h1 class="display-4">Library Books</h1>
-            <p class="text-muted">Browse and borrow books from our collection</p>
+            <h1 class="display-5">Search Results</h1>
+            <p class="text-muted">Search for: <strong>"{{ $query }}"</strong></p>
         </div>
         <div class="col-md-4">
             <form method="GET" action="{{ route('books.search') }}" class="d-flex gap-2">
-                <input type="text" name="q" class="form-control" placeholder="Search by title, author..." required>
+                <input type="text" name="q" class="form-control" placeholder="Search..." value="{{ $query }}" required>
                 <button type="submit" class="btn btn-primary">Search</button>
             </form>
         </div>
     </div>
 
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
-    @if (session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
     @if ($books->count() > 0)
+        <p class="text-muted mb-4">Found {{ $books->total() }} result(s)</p>
+        
         <div class="row g-4">
             @foreach($books as $book)
                 <div class="col-md-6 col-lg-4">
@@ -64,8 +52,9 @@
         </nav>
     @else
         <div class="alert alert-info text-center py-5">
-            <h5>No books found</h5>
-            <p>Start adding books to build your collection.</p>
+            <h5>No books found matching your search</h5>
+            <p>Try searching with different keywords.</p>
+            <a href="{{ route('books.index') }}" class="btn btn-primary mt-3">Browse All Books</a>
         </div>
     @endif
 </div>

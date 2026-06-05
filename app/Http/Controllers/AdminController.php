@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Service;
 use App\Models\User;
 use App\Models\Appointment;
+use App\Models\Book;
+use App\Models\BorrowRecord;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -179,6 +181,13 @@ class AdminController extends Controller
         return redirect('/admin/services')->with('success', 'Service deleted successfully!');
     }
 
+    // Books Management
+    public function books()
+    {
+        $books = Book::paginate(15);
+        return view('admin.books', compact('books'));
+    }
+
     // Dashboard
     public function dashboard()
     {
@@ -186,12 +195,20 @@ class AdminController extends Controller
         $totalServices = Service::count();
         $totalAppointments = Appointment::count();
         $pendingAppointments = Appointment::where('status', 'pending')->count();
+        
+        // Library stats
+        $totalBooks = Book::count();
+        $totalBorrowRecords = BorrowRecord::count();
+        $activeBorrows = BorrowRecord::where('status', 'borrowed')->count();
 
         return view('admin.dashboard', compact(
             'totalUsers',
             'totalServices',
             'totalAppointments',
-            'pendingAppointments'
+            'pendingAppointments',
+            'totalBooks',
+            'totalBorrowRecords',
+            'activeBorrows'
         ));
     }
 
