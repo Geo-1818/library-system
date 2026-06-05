@@ -93,43 +93,4 @@
     @endif
 </div>
 @endsection
-                        <th>Quantity</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($books as $book)
-                        <tr>
-                            <td>{{ $book->id }}</td>
-                            <td>{{ $book->title }}</td>
-                            <td>{{ $book->author }}</td>
-                            <td>{{ $book->isbn }}</td>
-                            <td>
-                                <span class="badge {{ $book->quantity > 0 ? 'bg-success' : 'bg-danger' }}">
-                                    {{ $book->quantity }}
-                                </span>
-                            </td>
-                            <td>
-                                <a href="{{ route('admin.books.edit', $book->id) }}" class="btn btn-sm btn-primary">Edit</a>
-                                <form action="{{ route('admin.books.delete', $book->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="text-center">No books found</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-    </div>
 
-    <div class="d-flex justify-content-center mt-4">
-        {{ $books->links() }}
-    </div>
-</div>
-@endsection

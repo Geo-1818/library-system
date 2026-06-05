@@ -51,6 +51,8 @@
                 </div>
                 <div class="card-body">
                     <a href="{{ route('admin.users') }}" class="btn btn-primary me-2">Manage Users</a>
+                    <a href="{{ route('admin.books') }}" class="btn btn-secondary me-2">Manage Books</a>
+                    <a href="{{ route('admin.borrow-records') }}" class="btn btn-warning me-2">Borrow Records</a>
                     <a href="{{ route('admin.services') }}" class="btn btn-success me-2">Manage Services</a>
                     <a href="{{ route('admin.appointments') }}" class="btn btn-info">Manage Appointments</a>
                 </div>

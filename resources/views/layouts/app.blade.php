@@ -139,6 +139,8 @@
                     <a href="{{ route('admin.services.import') }}" class="btn btn-primary w-100 mb-3">Import Services</a>
                     <a href="{{ route('admin.services') }}" class="btn btn-outline-light w-100 mb-2">Services</a>
                     <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-light w-100 mb-2">Dashboard</a>
+                    <a href="{{ route('admin.books') }}" class="btn btn-outline-light w-100 mb-2">Manage Books</a>
+                    <a href="{{ route('admin.borrow-records') }}" class="btn btn-outline-light w-100 mb-2">Borrow Records</a>
                     <a href="{{ route('admin.users') }}" class="btn btn-outline-light w-100 mb-2">Manage Users</a>
                     <a href="{{ route('admin.services') }}" class="btn btn-outline-light w-100 mb-2">Manage Services</a>
                     <a href="{{ route('admin.appointments') }}" class="btn btn-outline-light w-100 mb-2">Manage Appointments</a>
