@@ -162,6 +162,7 @@
                 </div>
                 <div class="sidebar-body d-flex flex-column h-100">
                     <a href="{{ route('student.dashboard') }}" class="btn btn-primary w-100 mb-3">Dashboard</a>
+                    <a href="{{ route('books.index') }}" class="btn btn-outline-light w-100 mb-2">Borrow Books</a>
                     <a href="{{ route('services.index') }}" class="btn btn-outline-light w-100 mb-2">Browse Services</a>
                     <a href="{{ route('student.history') }}" class="btn btn-outline-light w-100 mb-2">My History</a>
                     <div class="sidebar-footer mt-auto pt-3 border-top border-secondary">
