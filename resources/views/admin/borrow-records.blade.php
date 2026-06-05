@@ -69,19 +69,19 @@
                             <td>
                                 <div class="btn-group btn-group-sm" role="group">
                                     <a href="{{ route('admin.borrow-records.show', $record->id) }}" class="btn btn-outline-info" title="View">
-                                        <i class="bi bi-eye"></i>
+                                        <i class="bi bi-eye"></i> View
                                     </a>
                                     @if($record->status === 'borrowed')
                                         <form action="{{ route('admin.borrow-records.approve', $record->id) }}" method="POST" class="d-inline" title="Approve">
                                             @csrf
                                             <button type="submit" class="btn btn-outline-success btn-sm" onclick="return confirm('Approve this borrow?')">
-                                                <i class="bi bi-check-circle"></i>
+                                                <i class="bi bi-check-circle"></i> Approve
                                             </button>
                                         </form>
                                         <form action="{{ route('admin.borrow-records.reject', $record->id) }}" method="POST" class="d-inline" title="Reject">
                                             @csrf
                                             <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Reject this borrow?')">
-                                                <i class="bi bi-x-circle"></i>
+                                                <i class="bi bi-x-circle"></i> Reject
                                             </button>
                                         </form>
                                     @endif

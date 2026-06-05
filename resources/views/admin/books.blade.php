@@ -61,16 +61,16 @@
                             <td>
                                 <div class="btn-group btn-group-sm" role="group">
                                     <a href="{{ route('books.show', $book->id) }}" class="btn btn-outline-info" title="View">
-                                        <i class="bi bi-eye"></i>
+                                        <i class="bi bi-eye"></i> View
                                     </a>
                                     <a href="{{ route('admin.books.edit', $book->id) }}" class="btn btn-outline-warning" title="Edit">
-                                        <i class="bi bi-pencil"></i>
+                                        <i class="bi bi-pencil"></i> Edit
                                     </a>
                                     <form action="{{ route('admin.books.destroy', $book->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this book?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-outline-danger" title="Delete">
-                                            <i class="bi bi-trash"></i>
+                                            <i class="bi bi-trash"></i> Delete
                                         </button>
                                     </form>
                                 </div>
