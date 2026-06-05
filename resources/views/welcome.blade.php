@@ -1,6 +1,8 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-  <head>
+  
+
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name', 'Library System') }}</title>
@@ -12,6 +14,10 @@
     </style>
   </head>
   <body>
+
+
+
+
     <div class="page-center">
       <div class="card shadow-sm border-0 p-4">
         <h1 class="h3 mb-3">Welcome to {{ config('app.name', 'Library System') }}</h1>
