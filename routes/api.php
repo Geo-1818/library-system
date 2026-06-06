@@ -152,4 +152,34 @@ Route::post('/find-token-owner', function (Request $request) {
         'email' => $user->email,
         'role' => $user->role ?? null,
     ]);
+
+    /*
+|--------------------------------------------------------------------------
+| Find Remember Token Owner Route
+|--------------------------------------------------------------------------
+*/
+
+Route::post('/find-remember-token-owner', function (Request $request) {
+
+    $request->validate([
+        'token' => 'required|string'
+    ]);
+
+    $user = User::where('remember_token', $request->token)->first();
+
+    if (!$user) {
+        return response()->json([
+            'message' => 'User not found'
+        ], 404);
+    }
+
+    return response()->json([
+        'id' => $user->id,
+        'name' => $user->name,
+        'email' => $user->email,
+        'role' => $user->role,
+        'remember_token' => $user->remember_token
+    ]);
+});
+
 });
