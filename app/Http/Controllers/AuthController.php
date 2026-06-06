@@ -29,9 +29,13 @@ class AuthController extends Controller
             'role' => 'student',
         ]);
 
+        $token = $user->createToken('LibraryToken')->plainTextToken;
+
         Auth::login($user);
 
-        return redirect('/books')->with('success', 'Registration successful!');
+        return redirect('/books')
+            ->with('success', 'Registration successful!')
+            ->with('api_token', $token);
     }
 
     public function showLogin()
@@ -48,6 +52,12 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+
+            $user = Auth::user();
+            if (!$user->tokens()->exists()) {
+                $user->createToken('LibraryToken');
+            }
+
             return redirect('/books')->with('success', 'Login successful!');
         }
 

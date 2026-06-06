@@ -9,6 +9,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BorrowRecordController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Online Booking System Routes
@@ -178,6 +179,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
     Route::delete('/users/{id}', [AdminController::class, 'deleteUser'])
         ->name('admin.users.delete');
+
+    Route::post('/users/{id}/generate-token', [AdminController::class, 'generateUserToken'])
+        ->name('admin.users.generate-token');
 
     // Services management
     Route::get('/services', [AdminController::class, 'services'])

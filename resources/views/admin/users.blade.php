@@ -18,6 +18,14 @@
         </div>
     @endif
 
+    @if (session('generated_token'))
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <strong>Generated token:</strong>
+            <code>{{ session('generated_token') }}</code>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
     <div class="card">
         <div class="card-body">
             <table class="table table-striped table-hover">
@@ -47,6 +55,10 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                                <form action="{{ route('admin.users.generate-token', $user->id) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-secondary">Generate Token</button>
                                 </form>
                             </td>
                         </tr>

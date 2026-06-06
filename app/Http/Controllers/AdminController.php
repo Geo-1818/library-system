@@ -51,6 +51,16 @@ class AdminController extends Controller
         return redirect('/admin/users')->with('success', 'User deleted successfully!');
     }
 
+    public function generateUserToken($id)
+    {
+        $user = User::findOrFail($id);
+        $token = $user->createToken('LibraryToken')->plainTextToken;
+
+        return redirect('/admin/users')
+            ->with('success', 'Token generated for ' . $user->email)
+            ->with('generated_token', $token);
+    }
+
     // Services Management
     public function services()
     {
