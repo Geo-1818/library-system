@@ -152,8 +152,9 @@ Route::post('/find-token-owner', function (Request $request) {
         'email' => $user->email,
         'role' => $user->role ?? null,
     ]);
+});
 
-    /*
+/*
 |--------------------------------------------------------------------------
 | Find Remember Token Owner Route
 |--------------------------------------------------------------------------
@@ -180,6 +181,4 @@ Route::post('/find-remember-token-owner', function (Request $request) {
         'role' => $user->role,
         'remember_token' => $user->remember_token
     ]);
-});
-
 });
