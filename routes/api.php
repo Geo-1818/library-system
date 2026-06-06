@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\AppointmentController as AppointmentApiController;
 use App\Models\User;
 use Laravel\Sanctum\PersonalAccessToken;
+use Illuminate\Support\Facades\Hash;
 
 /*
 |--------------------------------------------------------------------------
@@ -180,5 +181,124 @@ Route::post('/find-remember-token-owner', function (Request $request) {
         'email' => $user->email,
         'role' => $user->role,
         'remember_token' => $user->remember_token
+    ]);
+    
+});
+    /*
+|--------------------------------------------------------------------------
+| User CRUD Routes
+|--------------------------------------------------------------------------
+*/
+
+// GET all users
+Route::get('/users', function () {
+    return response()->json(User::all());
+});
+
+// GET single user
+Route::get('/users/{id}', function ($id) {
+
+    $user = User::find($id);
+
+    if (!$user) {
+        return response()->json([
+            'message' => 'User not found'
+        ], 404);
+    }
+
+    return response()->json($user);
+});
+
+// POST create user
+Route::post('/users', function (Request $request) {
+
+    $request->validate([
+        'name' => 'required',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|min:6',
+        'role' => 'nullable'
+    ]);
+
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'role' => $request->role ?? 'user'
+    ]);
+
+    return response()->json([
+        'message' => 'User created successfully',
+        'data' => $user
+    ], 201);
+});
+
+// PUT update whole user
+Route::put('/users/{id}', function (Request $request, $id) {
+
+    $user = User::find($id);
+
+    if (!$user) {
+        return response()->json([
+            'message' => 'User not found'
+        ], 404);
+    }
+
+    $user->update([
+        'name' => $request->name,
+        'email' => $request->email,
+        'role' => $request->role
+    ]);
+
+    return response()->json([
+        'message' => 'User updated successfully',
+        'data' => $user
+    ]);
+});
+
+// PATCH update selected fields
+Route::patch('/users/{id}', function (Request $request, $id) {
+
+    $user = User::find($id);
+
+    if (!$user) {
+        return response()->json([
+            'message' => 'User not found'
+        ], 404);
+    }
+
+    if ($request->has('name')) {
+        $user->name = $request->name;
+    }
+
+    if ($request->has('email')) {
+        $user->email = $request->email;
+    }
+
+    if ($request->has('role')) {
+        $user->role = $request->role;
+    }
+
+    $user->save();
+
+    return response()->json([
+        'message' => 'User patched successfully',
+        'data' => $user
+    ]);
+});
+
+Route::delete('/users/{id}', function ($id) {
+
+    $user = User::find($id);
+
+    if (!$user) {
+        return response()->json([
+            'message' => 'User not found'
+        ], 404);
+    }
+
+    $user->delete();
+
+    return response()->json([
+        'message' => 'User deleted successfully'
     ]);
 });
