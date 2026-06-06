@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\BorrowRecordController;
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\AppointmentController as AppointmentApiController;
 use App\Models\User;
+use Laravel\Sanctum\PersonalAccessToken;
 
 /*
 |--------------------------------------------------------------------------
@@ -104,7 +105,7 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
 
 /*
 |--------------------------------------------------------------------------
-| Generate Token Route (TEMPORARY)
+| Generate Token Route
 |--------------------------------------------------------------------------
 */
 
@@ -120,5 +121,35 @@ Route::get('/generate-token', function () {
 
     return response()->json([
         'token' => $user->createToken('LibraryToken')->plainTextToken
+    ]);
+});
+
+/*
+|--------------------------------------------------------------------------
+| Find Token Owner Route
+|--------------------------------------------------------------------------
+*/
+
+Route::post('/find-token-owner', function (Request $request) {
+
+    $request->validate([
+        'token' => 'required'
+    ]);
+
+    $accessToken = PersonalAccessToken::findToken($request->token);
+
+    if (!$accessToken) {
+        return response()->json([
+            'message' => 'Token not found'
+        ], 404);
+    }
+
+    $user = $accessToken->tokenable;
+
+    return response()->json([
+        'user_id' => $user->id,
+        'name' => $user->name,
+        'email' => $user->email,
+        'role' => $user->role ?? null,
     ]);
 });
