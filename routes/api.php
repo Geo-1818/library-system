@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\BorrowRecordController;
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\AppointmentController as AppointmentApiController;
 use App\Models\User;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -19,20 +20,23 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 /*
 |--------------------------------------------------------------------------
-| API Key Auth Routes (for Postman X-API-KEY)
+| API Key Auth Routes
 |--------------------------------------------------------------------------
 */
+
 Route::middleware(\App\Http\Middleware\ApiKeyAuth::class)->prefix('apikey')->group(function () {
-    // Appointments full CRUD via API key
+
     Route::get('/appointments', [AppointmentApiController::class, 'index']);
     Route::post('/appointments', [AppointmentApiController::class, 'store']);
     Route::get('/appointments/{id}', [AppointmentApiController::class, 'show']);
     Route::patch('/appointments/{id}', [AppointmentApiController::class, 'update']);
     Route::delete('/appointments/{id}', [AppointmentApiController::class, 'destroy']);
 
-    // Endpoint to list users and their api keys (for SQLite viewing)
     Route::get('/users/api-keys', function () {
-        return response()->json(['success' => true, 'data' => \App\Models\User::select('id','name','email','api_key')->get()]);
+        return response()->json([
+            'success' => true,
+            'data' => \App\Models\User::select('id','name','email','api_key')->get()
+        ]);
     });
 });
 
@@ -41,6 +45,7 @@ Route::middleware(\App\Http\Middleware\ApiKeyAuth::class)->prefix('apikey')->gro
 | Public Book Routes
 |--------------------------------------------------------------------------
 */
+
 Route::prefix('books')->group(function () {
     Route::get('/', [BookController::class, 'index']);
     Route::get('/{id}', [BookController::class, 'show']);
@@ -52,8 +57,9 @@ Route::prefix('books')->group(function () {
 | Authenticated User Routes
 |--------------------------------------------------------------------------
 */
+
 Route::middleware('auth:sanctum')->group(function () {
-    // Borrow operations
+
     Route::prefix('borrows')->group(function () {
         Route::get('/', [BorrowRecordController::class, 'userBorrows']);
         Route::post('/', [BorrowRecordController::class, 'borrow']);
@@ -61,7 +67,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{id}', [BorrowRecordController::class, 'show']);
     });
 
-    // Appointment operations
     Route::prefix('appointments')->group(function () {
         Route::get('/', [AppointmentApiController::class, 'index']);
         Route::post('/', [AppointmentApiController::class, 'store']);
@@ -70,39 +75,50 @@ Route::middleware('auth:sanctum')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| Admin Only Routes
+| Admin Routes
 |--------------------------------------------------------------------------
 */
+
 Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function () {
-    // Dashboard
+
     Route::get('/dashboard', [AdminController::class, 'dashboard']);
 
-    // Users management
     Route::prefix('users')->group(function () {
         Route::get('/', [AdminController::class, 'users']);
         Route::put('/{id}', [AdminController::class, 'updateUser']);
         Route::delete('/{id}', [AdminController::class, 'deleteUser']);
     });
 
-    // Books management
     Route::prefix('books')->group(function () {
         Route::post('/', [BookController::class, 'store']);
         Route::put('/{id}', [BookController::class, 'update']);
         Route::delete('/{id}', [BookController::class, 'destroy']);
     });
 
-    // Borrow records management
     Route::prefix('borrows')->group(function () {
         Route::get('/', [BorrowRecordController::class, 'index']);
         Route::post('/{id}/approve', [BorrowRecordController::class, 'approveBorrow']);
         Route::post('/{id}/reject', [BorrowRecordController::class, 'rejectBorrow']);
     });
+});
 
-    Route::get('/generate-token', function () {
+/*
+|--------------------------------------------------------------------------
+| Generate Token Route (TEMPORARY)
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/generate-token', function () {
 
     $user = User::find(1);
 
-    return $user->createToken('LibraryToken')->plainTextToken;
-});
+    if (!$user) {
+        return response()->json([
+            'message' => 'User not found'
+        ], 404);
+    }
 
+    return response()->json([
+        'token' => $user->createToken('LibraryToken')->plainTextToken
+    ]);
 });
