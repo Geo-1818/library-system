@@ -14,10 +14,20 @@ class StudentController extends Controller
     {
         $user = auth()->user();
 
+        Appointment::markDurationExceededForUser($user->id);
+
         // Appointment stats
         $availableServices = Service::where('available_slots', '>', 0)->count();
         $appointmentCount = $user->appointments()->count();
-        $upcomingAppointments = $user->appointments()->whereIn('status', ['pending', 'confirmed'])->count();
+        $appointments = $user->appointments()->with('service')->whereIn('status', ['pending', 'confirmed'])->get();
+
+        $upcomingAppointments = $appointments->filter(function ($appointment) {
+            return ! $appointment->is_duration_exceeded;
+        })->count();
+
+        $expiredAppointments = $appointments->filter(function ($appointment) {
+            return $appointment->status === 'confirmed' && $appointment->is_duration_exceeded;
+        })->count();
 
         // Library stats
         $totalBooks = Book::count();
@@ -28,6 +38,7 @@ class StudentController extends Controller
             'availableServices',
             'appointmentCount',
             'upcomingAppointments',
+            'expiredAppointments',
             'totalBooks',
             'borrowedBooks',
             'returnedBooks'
@@ -36,8 +47,10 @@ class StudentController extends Controller
 
     public function history()
     {
-        $records = auth()->user()
-            ->appointments()
+        $user = auth()->user();
+        Appointment::markDurationExceededForUser($user->id);
+
+        $records = $user->appointments()
             ->with(['service', 'schedule'])
             ->latest()
             ->paginate(10);

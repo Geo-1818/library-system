@@ -225,6 +225,8 @@ class AdminController extends Controller
     // Appointment Records
     public function appointments()
     {
+        Appointment::markDurationExceededForAll();
+
         $records = Appointment::with(['user', 'service', 'schedule'])->paginate(15);
         return view('admin.appointments', compact('records'));
     }

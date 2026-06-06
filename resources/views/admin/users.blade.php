@@ -56,10 +56,6 @@
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                 </form>
-                                <form action="{{ route('admin.users.generate-token', $user->id) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    <button type="submit" class="btn btn-sm btn-secondary">Generate Token</button>
-                                </form>
                             </td>
                         </tr>
                     @empty

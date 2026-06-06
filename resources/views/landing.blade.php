@@ -46,7 +46,7 @@
           <h1 class="display-5 mb-3">Welcome to the Online Booking System</h1>
           <p class="lead text-muted mb-4">Browse books, borrow, and manage your records. Simple, clean, and built for students and admins.</p>
           <p>
-            <a href="{{ route('services.index') }}" class="btn btn-primary btn-lg me-2">Browse Services</a>
+            <a href="{{ route('books.index') }}" class="btn btn-primary btn-lg me-2">Borrow Books</a>
             @if (Route::has('login'))
               <a href="{{ route('login') }}" class="btn btn-outline-secondary btn-lg">Sign in</a>
             @endif
@@ -74,9 +74,9 @@
         <div class="col-md-4">
           <div class="card h-100">
             <div class="card-body">
-              <h5 class="card-title">Browse Catalog</h5>
-              <p class="card-text text-muted">Search and find services available for booking.</p>
-              <a href="{{ route('services.index') }}" class="stretched-link text-decoration-none"></a>
+              <h5 class="card-title">Browse Books</h5>
+              <p class="card-text text-muted">Search and find books available for borrowing.</p>
+              <a href="{{ route('books.index') }}" class="stretched-link text-decoration-none"></a>
             </div>
           </div>
         </div>

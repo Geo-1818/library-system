@@ -110,6 +110,9 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/appointments/{id}/cancel', [AppointmentController::class, 'cancel'])
         ->name('appointments.cancel');
+
+    Route::post('/appointments/{id}/complete', [AppointmentController::class, 'complete'])
+        ->name('appointments.complete');
 });
 
 Route::get('/info/appointment-limit', function () {
@@ -230,7 +233,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 });
 
 // Legacy route redirects for compatibility
-Route::redirect('/books', '/services', 301);
 Route::redirect('/books/{id}/borrow', '/services/{id}/book', 301);
 Route::redirect('/borrow/{id}', '/appointments/{id}/book', 301);
 Route::redirect('/return/{id}', '/appointments/{id}/cancel', 301);

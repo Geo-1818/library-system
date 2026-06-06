@@ -70,7 +70,10 @@ class AppointmentController extends Controller
     public function cancel($id)
     {
         $appointment = Appointment::findOrFail($id);
-        $this->authorize('cancel', $appointment);
+
+        if ($appointment->user_id !== Auth::id()) {
+            abort(403);
+        }
 
         if (! in_array($appointment->status, ['pending', 'confirmed'])) {
             return back()->with('error', 'This appointment cannot be canceled.');
@@ -80,5 +83,30 @@ class AppointmentController extends Controller
         $appointment->service->increment('available_slots');
 
         return back()->with('success', 'Appointment canceled successfully.');
+    }
+
+    public function complete($id)
+    {
+        $appointment = Appointment::findOrFail($id);
+        
+        $user = Auth::user();
+        if ($user->role !== 'admin' && $appointment->user_id !== $user->id) {
+            abort(403);
+        }
+
+        if ($appointment->status !== 'confirmed') {
+            return back()->with('error', 'Only confirmed appointments can be marked as completed.');
+        }
+
+        // Allow admins to mark completed anytime; students only after scheduled start
+        if ($user->role !== 'admin') {
+            if (! $appointment->appointment_date || now()->lt($appointment->appointment_date)) {
+                return back()->with('error', 'You can only confirm the session after the scheduled start time.');
+            }
+        }
+
+        $appointment->update(['status' => 'completed']);
+
+        return back()->with('success', 'Appointment session marked as ended.');
     }
 }

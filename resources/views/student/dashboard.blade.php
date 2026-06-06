@@ -39,6 +39,16 @@
         </div>
     </div>
 
+    @if (! empty($expiredAppointments) && $expiredAppointments > 0)
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="alert alert-warning">
+                    You have {{ $expiredAppointments }} appointment{{ $expiredAppointments > 1 ? 's' : '' }} that reached the scheduled duration limit. Please book another appointment to continue your session.
+                </div>
+            </div>
+        </div>
+    @endif
+
     <div class="row mt-4">
         <div class="col-12">
             <div class="card border-0 shadow-sm">

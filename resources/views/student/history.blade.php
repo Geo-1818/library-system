@@ -45,9 +45,18 @@
                                     </td>
                                     <td>{{ $record->appointment_date->format('M d, Y H:i') }}</td>
                                     <td>
-                                        <span class="badge {{ $record->status === 'pending' ? 'bg-info text-dark' : ($record->status === 'confirmed' ? 'bg-success' : 'bg-danger') }}">
+                                        <span class="badge {{ $record->status === 'pending' ? 'bg-info text-dark' : ($record->status === 'confirmed' ? 'bg-success' : ($record->status === 'completed' ? 'bg-secondary' : 'bg-danger')) }}">
                                             {{ ucfirst($record->status) }}
                                         </span>
+
+                                        @if ($record->status === 'confirmed' && $record->is_duration_exceeded)
+                                            <div class="mt-1">
+                                                <span class="badge bg-warning text-dark">Duration exceeded</span>
+                                            </div>
+                                        @endif
+                                        @if (! empty($record->exceeded_message))
+                                            <div class="mt-1 small text-warning">{{ $record->exceeded_message }}</div>
+                                        @endif
                                     </td>
                                     <td class="text-end">
                                         <span class="text-muted">No action</span>

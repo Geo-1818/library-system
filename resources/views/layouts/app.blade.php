@@ -162,11 +162,11 @@
                     <button class="btn btn-sm btn-light d-none d-lg-inline" id="sidebarClose">×</button>
                 </div>
                 <div class="sidebar-body d-flex flex-column h-100">
-                    <a href="{{ route('student.dashboard') }}" class="btn btn-primary w-100 mb-3">Dashboard</a>
-                    <a href="{{ route('books.index') }}" class="btn btn-outline-light w-100 mb-2">Borrow Books</a>
-                    <a href="{{ route('library.borrow-history') }}" class="btn btn-outline-light w-100 mb-2">Borrow History</a>
-                    <a href="{{ route('services.index') }}" class="btn btn-outline-light w-100 mb-2">Browse Services</a>
-                    <a href="{{ route('student.history') }}" class="btn btn-outline-light w-100 mb-2">My History</a>
+                    <a href="{{ url('/dashboard') }}" class="btn btn-primary w-100 mb-3">Dashboard</a>
+                    <a href="{{ url('/books') }}" class="btn btn-outline-light w-100 mb-2">Borrow Books</a>
+                    <a href="{{ url('/library/borrow-history') }}" class="btn btn-outline-light w-100 mb-2">Borrow History</a>
+                    <a href="{{ url('/services') }}" class="btn btn-outline-light w-100 mb-2">Browse Services</a>
+                    <a href="{{ url('/history') }}" class="btn btn-outline-light w-100 mb-2">My History</a>
                     <div class="sidebar-footer mt-auto pt-3 border-top border-secondary">
                         <div class="mb-2 text-white-50">Signed in as</div>
                         <div class="fw-bold mb-2">{{ auth()->user()->name }}</div>

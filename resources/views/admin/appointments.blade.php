@@ -42,6 +42,14 @@
                                                 @csrf
                                                 <button class="btn btn-sm btn-danger">Reject</button>
                                             </form>
+                                        @elseif ($record->status === 'confirmed')
+                                            <form action="{{ route('appointments.complete', $record->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                <button class="btn btn-sm btn-primary">Mark session ended</button>
+                                            </form>
+                                            @if (! empty($record->exceeded_message))
+                                                <div class="mt-1 small text-warning">{{ $record->exceeded_message }}</div>
+                                            @endif
                                         @else
                                             <span class="text-muted">No actions</span>
                                         @endif
