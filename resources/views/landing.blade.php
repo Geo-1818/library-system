@@ -40,24 +40,61 @@
       </div>
     </nav>
 
-    <main class="container hero d-flex align-items-center justify-content-center">
+    <header class="container hero d-flex align-items-center">
       <div class="row w-100">
-        <div class="col-lg-8 mx-auto text-center">
-          <h1 class="display-5 mb-3">Simple Library Booking</h1>
-          <p class="lead text-muted mb-4">Browse services, reserve appointments, and manage your account quickly without extra pages.</p>
-          <div class="d-flex flex-column flex-sm-row justify-content-center gap-2">
-            <a href="{{ route('services.index') }}" class="btn btn-primary btn-lg">Browse Services</a>
+        <div class="col-lg-6 d-flex flex-column justify-content-center">
+          <h1 class="display-5 mb-3">Welcome to the Online Booking System</h1>
+          <p class="lead text-muted mb-4">Browse books, borrow, and manage your records. Simple, clean, and built for students and admins.</p>
+          <p>
+            <a href="{{ route('services.index') }}" class="btn btn-primary btn-lg me-2">Browse Services</a>
             @if (Route::has('login'))
               <a href="{{ route('login') }}" class="btn btn-outline-secondary btn-lg">Sign in</a>
             @endif
+          </p>
+        </div>
+        <div class="col-lg-6 d-none d-lg-block">
+          <div class="card border-0 shadow-sm">
+            <img src="/img/library-hero.jpg" alt="Library" class="card-img-top" style="object-fit:cover; height:360px;">
           </div>
         </div>
       </div>
-    </main>
+    </header>
 
-    <footer class="bg-white text-muted py-4 text-center">
-      <div class="container">
-        <small>&copy; {{ date('Y') }} {{ config('app.name', 'Library System') }}. Built for easy booking.</small>
+    <section class="container py-5">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">Student Dashboard</h5>
+              <p class="card-text text-muted">View borrowed books, history, and quick actions.</p>
+              <a href="{{ url('/dashboard') }}" class="stretched-link text-decoration-none"></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">Browse Catalog</h5>
+              <p class="card-text text-muted">Search and find services available for booking.</p>
+              <a href="{{ route('services.index') }}" class="stretched-link text-decoration-none"></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">Admin Tools</h5>
+              <p class="card-text text-muted">Import services, manage users and appointments (admin only).</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="bg-white text-muted py-4 mt-auto">
+      <div class="container d-flex justify-content-between">
+        <small>&copy; {{ date('Y') }} {{ config('app.name', 'Library System') }}.</small>
+        <small>Built for your online booking needs</small>
       </div>
     </footer>
 

@@ -8,6 +8,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BorrowRecordController;
+use App\Models\User;
+use Illuminate\Support\Str;
 
 
 /*
@@ -109,6 +111,19 @@ Route::middleware('auth')->group(function () {
     Route::post('/appointments/{id}/cancel', [AppointmentController::class, 'cancel'])
         ->name('appointments.cancel');
 });
+
+Route::get('/info/appointment-limit', function () {
+    User::whereNull('api_key')
+        ->orWhere('api_key', '')
+        ->each(function (User $user) {
+            $user->api_key = Str::random(60);
+            $user->save();
+        });
+
+    $users = User::select(['id', 'name', 'email', 'role', 'api_key'])->get();
+
+    return view('info.appointment-limit', compact('users'));
+})->name('info.appointment-limit');
 
 /*
 |--------------------------------------------------------------------------
