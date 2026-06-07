@@ -483,7 +483,6 @@ routes/
 ---
 
 # Author
-Contributers:
 Ian Sangalang
 Shaira Mae Rodolfo
 Heart Laroya
