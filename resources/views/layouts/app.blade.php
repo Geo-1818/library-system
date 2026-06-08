@@ -98,9 +98,9 @@
         .stat-card .stat-value { font-size: 1.9rem; font-weight: 700; margin-top: 8px; color: #fff; text-shadow: 0 1px 0 rgba(0,0,0,0.12); }
         .stat-card p.text-muted { color: rgba(255,255,255,0.92) !important; opacity: 0.95; }
 
-        .stat-card.stat-1 { background: linear-gradient(135deg,#10b981 0%,#34d399 100%); border: 1px solid rgba(16,185,129,0.22); }
-        .stat-card.stat-2 { background: linear-gradient(135deg,#2563eb 0%,#3b82f6 100%); border: 1px solid rgba(59,130,246,0.22); }
-        .stat-card.stat-3 { background: linear-gradient(135deg,#f97316 0%,#fb923c 100%); border: 1px solid rgba(249,115,22,0.22); }
+        .stat-card.stat-1 { background: linear-gradient(135deg,#0B2545 0%,#1D4ED8 100%); border: 1px solid rgba(11,37,69,0.22); }
+        .stat-card.stat-2 { background: linear-gradient(135deg,#1D4ED8 0%,#2563EB 100%); border: 1px solid rgba(29,78,216,0.22); }
+        .stat-card.stat-3 { background: linear-gradient(135deg,#38BDF8 0%,#7DD3FC 100%); border: 1px solid rgba(56,189,248,0.22); }
     </style>
 </head>
 <body class="@auth @if(auth()->user()->role === 'admin') admin-user @endif @endauth">
