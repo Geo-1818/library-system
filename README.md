@@ -25,6 +25,12 @@ https://library-system-production-ec4f.up.railway.app/
 
 ---
 
+# Contributors
+
+* `GEO-8118` — contributed dashboard color enhancement and styling for the student dashboard in branch `GEO-1818`.
+
+---
+
 # System Requirements
 
 Before running the project, install the following:
