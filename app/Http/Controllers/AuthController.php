@@ -33,7 +33,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect('/books')
+        return $this->redirectToDashboard($user)
             ->with('success', 'Registration successful!')
             ->with('api_token', $token);
     }
@@ -58,12 +58,21 @@ class AuthController extends Controller
                 $user->createToken('LibraryToken');
             }
 
-            return redirect('/books')->with('success', 'Login successful!');
+            return $this->redirectToDashboard($user)->with('success', 'Login successful!');
         }
 
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ])->onlyInput('email');
+    }
+
+    protected function redirectToDashboard(User $user)
+    {
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+
+        return redirect()->route('student.dashboard');
     }
 
     public function logout(Request $request)
